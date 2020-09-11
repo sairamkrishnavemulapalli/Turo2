@@ -5,7 +5,7 @@ This repo is accomplish the interview tasks.
 1. EKS cluster setup.
 2. Have the *kubeconfig* file to access the cluster.
 3. Argo CD already installed on the cluster.
-   Following the instructions: https://argoproj.github.io/argo-cd/getting_started/
+   Following the [instructions](https://argoproj.github.io/argo-cd/getting_started/)
 4. RDS cluster and DB created, provided with credentials.
 
 ## Usage
