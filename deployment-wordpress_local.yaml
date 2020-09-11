@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wordpress-rds
+  namespace: argocd
+  labels:
+    app: wordpress-rds
+spec:
+  selector:
+    matchLabels:
+      app: wordpress-rds
+      tier: frontend-rds
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: wordpress-rds
+        tier: frontend-rds
+    spec:
+      containers:
+      - image: wordpress
+        name: wordpress
+        env:
+        - name: WORDPRESS_DB_HOST
+          valueFrom:
+            secretKeyRef:
+              name: rds-pass
+              key: host
+        - name: WORDPRESS_DB_NAME
+          valueFrom:
+            secretKeyRef:
+              name: rds-pass
+              key: dbname
+        - name: WORDPRESS_DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: rds-pass
+              key: username
+        - name: WORDPRESS_DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: rds-pass
+              key: password
+        ports:
+        - containerPort: 80
+          name: wordpress
+        volumeMounts:
+        - name: wordpress-persistent-storage
+          mountPath: /var/www/html
+      volumes:
+      - name: wordpress-persistent-storage
+        persistentVolumeClaim:
+          claimName: wp-rds-pv-claim
